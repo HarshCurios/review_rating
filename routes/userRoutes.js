@@ -1,9 +1,34 @@
-const express = require('express');
-const user = require('../controllers/userController');
+const express = require("express");
 
+const user = require("../controllers/userController");
+const {
+  registerUserValidation,
+  logInUserValidation,
+  sendUserPasswordEmailValidation,
+  resetPasswordValidation,
+} = require("../validations/user/userDataValidation");
+const { userAuthentication } = require("../middlewares/authToken");
+const { userUpload } = require("../middlewares/userImageStorage");
 
-const router = express.Router();
+const userRouter = express.Router();
 
-router.post('/createuser'  , user.createUser);
+userRouter.post(
+  "/create",
+  userUpload.single("profilePic"),
+  registerUserValidation,
+  user.createUser
+);
+userRouter.post("/login", logInUserValidation, user.userLogIn);
+userRouter.get("/check", userAuthentication, user.checkToken);
+userRouter.post(
+  "/resetpasswordemail",
+  sendUserPasswordEmailValidation,
+  user.sendUserPasswordEmail
+);
+userRouter.post(
+  "/resetpassword/:id/:token",
+  resetPasswordValidation,
+  user.resetPassword
+);
 
-module.exports = router
+module.exports = userRouter;
