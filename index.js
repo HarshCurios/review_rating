@@ -1,9 +1,13 @@
 require("dotenv").config();
 const express = require("express");
 require("./config/modelConfig");
+const logger = require('./utils/logger')
 let commonRouter = require("./routes/mainRouter");
 //const {transporter , mailOptions} = require('./service/emailService');
 //const cron = require('node-cron')
+
+const PORT = process.env.PORT || 5000;
+const HOST = "localhost"
 
 const app = express();
 
@@ -32,5 +36,6 @@ app.use("/", commonRouter);
 // })
 
 app.listen(process.env.PORT, (req, res) => {
-  console.log(`Server is running on PORT : ${process.env.PORT}`);
+  console.log(`Server is running on PORT : ${process.env.PORT}`),
+  logger.info(`server started and running on: http://${HOST}${PORT} `)
 });
