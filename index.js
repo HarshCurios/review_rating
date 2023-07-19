@@ -35,7 +35,9 @@ app.use("/", commonRouter);
 //   })
 // })
 
-app.listen(process.env.PORT, (req, res) => {
+const server = app.listen(process.env.PORT, (req, res) => {
   console.log(`Server is running on PORT : ${process.env.PORT}`),
   logger.info(`server started and running on: http://${HOST}${PORT} `)
 });
+
+module.exports = server
