@@ -1,5 +1,5 @@
 const { createLogger, transports, format } = require("winston");
-require('winston-mongodb')
+require("winston-mongodb");
 
 const logger = createLogger({
   transports: [
@@ -16,25 +16,25 @@ const logger = createLogger({
       filename: "logs/log_info.log",
       level: "info",
       maxsize: 5242880,
-      //format: format.combine(format.timestamp(), format.json()),
       format: format.combine(
         format.timestamp({ format: "MMM-DD-YYYY HH:mm:ss" }),
         format.align(),
         format.printf(
-          (info) => `level : ${info.level} : ${[info.timestamp]} : ${info.message}`
+          (info) =>
+            `level : ${info.level} : ${[info.timestamp]} : ${info.message}`
         )
       ),
     }),
 
     new transports.MongoDB({
-      level: 'info',
+      level: "info",
       db: process.env.URL,
       options: {
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
       },
-      collection: 'logData',
-      format: format.combine(format.timestamp(), format.json())
-    })
+      collection: "logData",
+      format: format.combine(format.timestamp(), format.json()),
+    }),
   ],
 });
 

@@ -5,7 +5,7 @@ module.exports = {
     const reviewData = new companyReviewSchema(req.body);
     try {
       await reviewData.save();
-      res.status(200).json({
+      res.status(201).json({
         success: true,
         message: "Review Added Successfully",
         review: reviewData,

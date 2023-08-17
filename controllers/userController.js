@@ -6,33 +6,26 @@ const userSchema = require("../models/userSchema");
 const { transporter } = require("../service/emailService");
 
 let createUser = async (req, res) => {
-  const salt = await bcrypt.genSalt(10);
   const userData = new userSchema(req.body);
   try {
-    userData.userName = req.body.userName
-      .trim()
-      .split(" ") //! single string ko array me convert kr diya
-      .map((data) => {
-        return data.charAt(0).toUpperCase() + data.slice(1);
-      })
-      .join(" "); //! dubara string me change kr diya
     const isUserExists = await userSchema.findOne({
       userEmail: req.body.userEmail,
     });
     if (isUserExists) {
       req.file ? unlinkSync(req.file.path) : null;
-      res.status(401).json({
+      res.status(409).json({
         success: false,
-        message: "User is already registered With this Email",
+        message: "User is already registered With this email",
       });
     } else {
+      const salt = await bcrypt.genSalt(10);
       userData.userPassword = await bcrypt.hash(req.body.userPassword, salt);
       const filePath = `/uploads/user/${req.file.filename}`;
       userData.profilePic = filePath;
       const user = await userData.save();
       res.status(201).json({
         success: true,
-        message: "user registered successfully",
+        message: "User registered successfully",
         createdUser: user,
       });
     }
@@ -60,19 +53,19 @@ const userLogIn = async (req, res) => {
         }); //! jwt = userData ko object form me leta hai
         res.status(200).json({
           success: true,
-          message: "LogIn successfully",
+          message: "User logged in successfully",
           accessToken: token,
         });
       } else {
         res.status(401).json({
           success: false,
-          message: "Invalid email or Password",
+          message: "Invalid email or password",
         });
       }
     } else {
       res.status(403).json({
         success: false,
-        message: "User is not recognized with this Email",
+        message: "User is not recognized with this email",
       });
     }
   } catch (error) {
@@ -81,10 +74,6 @@ const userLogIn = async (req, res) => {
       message: `Error occur ${error.message}`,
     });
   }
-};
-
-const checkToken = (req, res) => {
-  res.send("Hey , Your Token is Valid");
 };
 
 //User  Send Email for reset password API
@@ -104,7 +93,7 @@ const sendUserPasswordEmail = async (req, res) => {
         from: "harshitsharma0529@gmail.com",
         to: userEmail,
         subject: "Email for user reset Password",
-        text: `<a href=${link}>click on this for reset password`,
+        html: `<a href=${link}>click on this for reset password`,
       });
       return res.status(200).json({
         success: true,
@@ -115,7 +104,7 @@ const sendUserPasswordEmail = async (req, res) => {
     } else {
       res.status(403).json({
         success: false,
-        message: "Please Enter Valid Email",
+        message: "Please enter valid email",
       });
     }
   } catch (error) {
@@ -142,18 +131,18 @@ const resetPassword = async (req, res) => {
         });
         res.status(201).json({
           success: true,
-          message: "Password Updated Successfully",
+          message: "Password updated successfully",
         });
       } else {
         res.status(403).json({
           success: false,
-          message: `Password and ConfirmPassword does not match`,
+          message: "Password and confirmPassword does not match",
         });
       }
     } else {
       res.status(403).json({
         success: false,
-        message: `Please Enter Valid Email`,
+        message: `Please enter valid email`,
       });
     }
   } catch (error) {
@@ -167,7 +156,6 @@ const resetPassword = async (req, res) => {
 module.exports = {
   createUser,
   userLogIn,
-  checkToken,
   sendUserPasswordEmail,
   resetPassword,
 };

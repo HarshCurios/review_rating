@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const userAuthentication = async (req, res, next) => {
   const authHeader = req.headers.Authorization || req.headers.authorization;
   //console.log(req.headers);
-  console.log('authHeader :' ,  authHeader);
+  console.log("authHeader :", authHeader);
   if (authHeader && authHeader.startsWith("Bearer")) {
     let token = authHeader.split(" ")[1]; //! [1] esliye likha hai kyuki [o] pr 'Bearer' hota hai or [1] pr token no. hota hai
     //console.log('token :', token)

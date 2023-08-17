@@ -18,8 +18,7 @@ userRouter.post(
   registerUserValidation,
   user.createUser
 );
-userRouter.post("/login", logInUserValidation, user.userLogIn);
-userRouter.get("/check", userAuthentication, user.checkToken);
+userRouter.post("/login", userAuthentication, logInUserValidation, user.userLogIn);
 userRouter.post(
   "/resetpasswordemail",
   sendUserPasswordEmailValidation,

@@ -10,7 +10,8 @@ const userValSchema = {
         .min(3)
         .max(20)
         .message({
-          "string.min": "{#label} should contain at least {#limit} character", //! label = userName dikhayega
+          "string.min": "{#label} should contain at least {#limit} character",//! label = userName dikhayega
+          "string.max": "{#label} should contain not more than {#limit} character" 
         })
         .required(),
       userPhone: joi

@@ -1,6 +1,7 @@
 const { unlinkSync } = require("fs");
+
 const companySchema = require("../models/companySchema");
-const companyReviewSchema = require('../models/companyReviewSchema')
+const companyReviewSchema = require("../models/companyReviewSchema");
 
 module.exports = {
   createCompany: async (req, res) => {

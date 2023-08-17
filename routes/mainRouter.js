@@ -9,4 +9,5 @@ const commonRouter = express.Router();
 commonRouter.use("/user", userRouter);
 commonRouter.use("/company", companyRouter);
 commonRouter.use("/companyreview", companyReviewRouter);
+
 module.exports = commonRouter;
